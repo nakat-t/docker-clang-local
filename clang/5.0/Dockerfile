@@ -31,4 +31,10 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN    update-alternatives --install /usr/bin/clang        clang        /usr/bin/clang-5.0        10 \
+    && update-alternatives --install /usr/bin/clang++      clang++      /usr/bin/clang++-5.0      10 \
+    && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-5.0 10 \
+    && update-alternatives --install /usr/bin/clang-tidy   clang-tidy   /usr/bin/clang-tidy-5.0   10 \
+    && update-alternatives --install /usr/bin/llvm-ar      llvm-ar      /usr/bin/llvm-ar-5.0      10
+
 WORKDIR /data
