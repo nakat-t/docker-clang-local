@@ -1,6 +1,4 @@
-FROM ubuntu:18.04
-LABEL maintainer="nakat-t <armaiti.wizard@gmail.com>" \
-      description="My local clang-7 image."
+FROM ubuntu:18.04 as base
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -41,3 +39,11 @@ RUN    update-alternatives --install /usr/bin/clang        clang        /usr/bin
     && update-alternatives --install /usr/bin/llvm-ar      llvm-ar      /usr/bin/llvm-ar-7      10
 
 WORKDIR /data
+
+FROM base as test
+COPY run_tests.sh /
+RUN chmod +x /run_tests.sh
+
+FROM base as release
+LABEL maintainer="nakat-t <armaiti.wizard@gmail.com>" \
+      description="My local clang-7 image."

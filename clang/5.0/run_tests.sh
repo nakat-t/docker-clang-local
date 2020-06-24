@@ -2,7 +2,7 @@
 
 set -eu
 
-version=3.9
+version=5.0
 
 for cmd in clang clang-${version} clang++ clang++-${version} clang-format clang-format-${version} clang-tidy clang-tidy-${version} llvm-ar llvm-ar-${version}
 do
