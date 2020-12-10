@@ -1,7 +1,12 @@
 FROM ubuntu:20.04 as base
 
+ENV CMAKE_VERSION=3.19.1
+
+COPY sha256.txt .
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ca-certificates \
         openssh-client \
         procps \
         build-essential \
@@ -29,8 +34,20 @@ RUN apt-get update && \
         file \
         git \
         subversion \
+        wget \
+        libssl-dev \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz \
+    && sha256sum -c sha256.txt \
+    && tar -xzf cmake-${CMAKE_VERSION}.tar.gz \
+    && cd cmake-${CMAKE_VERSION} \
+    && ./bootstrap \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -f cmake-${CMAKE_VERSION}.tar.gz \
+    && rm -rf cmake-${CMAKE_VERSION}
 
 RUN    update-alternatives --install /usr/bin/clang        clang        /usr/bin/clang-10        10 \
     && update-alternatives --install /usr/bin/clang++      clang++      /usr/bin/clang++-10      10 \
